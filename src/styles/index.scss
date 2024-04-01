@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './components/feed.scss';
+
 *{
     margin: 0;
     padding: 0;

@@ -1,13 +1,16 @@
+import { Route, Routes } from "react-router-dom";
 
+import HomeLayout from "./components/Home/Layout";
+import Feed from "./pages/Feed";
 
 function App() {
-
-
   return (
-    <>
-      <h1 className="bg-blue-200">Hello World!</h1>
-    </>
-  )
+    <Routes>
+      <Route path="/" element={<HomeLayout />}>
+        <Route path="" element={<Feed />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;
