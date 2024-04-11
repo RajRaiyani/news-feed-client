@@ -2,48 +2,39 @@ import { useEffect,useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import FeedCard from '../components/Feed/FeedCard'
 import useGetFeeds from '../hooks/useGetFeeds';
+import TagsInput from '../components/TagInput/TagInput';
 
 
 export default function Feed() {
 
 
-  const [inputString, setInputString] = useState('');
+  const [tags, setTags] = useState(JSON.parse(localStorage.getItem('tokens'))||[]);
 
   const {feeds,tokens,setTokens,hasMore,resultCount,next} = useGetFeeds({pageSize:25});
 
 
   useEffect(()=>{
-    setInputString(localStorage.getItem('tokenString') || '');
-  },[])
-
-
-
-  function handleInput(e){
-    setInputString(e.target.value);
-  }
+    localStorage.setItem('tokens',JSON.stringify(tags));
+  },[tags])
 
   function apply(){
-    localStorage.setItem('tokenString',inputString)
-    let string = inputString; 
-    if(inputString.endsWith(',')) string = inputString.slice(0,-1);
-    let tokens = string.split(',').map((token) => token.trim());
-    setTokens(tokens);
+    setTokens(tags);
   }
 
   function clear(){
     if(tokens.length) setTokens([]);
   }
 
-
   return (
-    <div>
-      <div className='bg-white sticky top-0'>
+    <>
+      <div className='bg-white sticky top-0 w-full'>
 
-        <div className='w-fit mx-auto'>
-          <div>
-            <textarea rows={2} cols={70} className='border-2 rounded mt-2 p-1' placeholder='Tokens...(separated by ",")'
-            onChange={handleInput} value={inputString}>
-            </textarea>
+        <div className='w-[70%] mx-auto'>
+          <div className=' w-[70%] flex items-end mx-auto'>
+            <TagsInput
+              tags={tags}
+              onTagsChange={setTags}
+            />
             <button className='border rounded-lg mx-1 px-1' onClick={apply}>apply</button>
             <button className='border rounded-lg mx-1 px-1' onClick={clear}>clear</button>
           </div>
@@ -76,6 +67,6 @@ export default function Feed() {
         </InfiniteScroll>
 
       </div>
-    </div>
+    </>
   )
 }
